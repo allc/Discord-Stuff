@@ -1,5 +1,5 @@
 from flask import Flask, render_template, session, request, redirect
-from config import DEBUG, API_ENDPOINT
+from config import DEBUG, API_ENDPOINT, CLIENT_ID, REDIRECT_URI
 from utils import exchange_code
 import secrets
 import requests
@@ -11,7 +11,8 @@ app.secret_key = secrets.token_urlsafe(16)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    discord_aurhotize_url = 'https://discord.com/oauth2/authorize?client_id=%s&response_type=code&redirect_uri=%s&scope=guilds' % (CLIENT_ID, REDIRECT_URI)
+    return render_template('index.html', discord_aurhotize_url=discord_aurhotize_url)
 
 @app.route('/discord-oauth2')
 def discord_oauth2():
