@@ -24,10 +24,28 @@
           </div>
           {% endif %}
           <div class="col">
-            <h2>{{ guild.name }}</h2>
+            <h2 {% if guild.owner %}class="text-primary"{% endif %}>{{ guild.name }}</h2>
             <p>Created at: {{ guild.created_at }}</p>
           </div>
-          <!-- {{ guild.owner }} {{ guild.permissions }} {{ guild.features }} -->
+          <div class="col">
+            <table class="table-bordered">
+              <thead>
+                <tr>
+                  {% for permission in guild.permissions %}
+                  <th>{{ permission }}</th>
+                  {% endfor %}
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  {% for permission in guild.permissions %}
+                  <td>{% if guild.permissions[permission] %}✅{% else %}❌{% endif %}</td>
+                  {% endfor %}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- {{ guild.features }} -->
         </li>
         {% endfor %}
   </div>

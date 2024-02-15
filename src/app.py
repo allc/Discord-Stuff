@@ -1,12 +1,11 @@
 from flask import Flask, render_template, session, request, redirect
-from config import DEBUG, API_ENDPOINT, CLIENT_ID, REDIRECT_URI
-from utils import exchange_code
-import secrets
+from config import DEBUG, API_ENDPOINT, CLIENT_ID, REDIRECT_URI, SECRET_KEY
+from utils import exchange_code, get_discord_permission_flags, get_discord_permission_friendly_names
 import requests
 from datetime import datetime
 
 app = Flask(__name__)
-app.secret_key = secrets.token_urlsafe(16)
+app.secret_key = SECRET_KEY
 
 
 @app.route('/')
@@ -34,6 +33,12 @@ def dashboard():
         milliseconds = int(guild['id']) >> 22
         milliseconds += 1420070400000
         guild['created_at'] = datetime.utcfromtimestamp(milliseconds / 1000).strftime('%Y-%m-%d %H:%M:%S')
+        permissions_mask = int(guild['permissions'])
+        permissions = {}
+        permission_friendly_names = get_discord_permission_friendly_names()
+        for permission, flag in get_discord_permission_flags().items():
+            permissions[permission_friendly_names[permission]] = bool(permissions_mask & flag)
+        guild['permissions'] = permissions
         guild['features'] = ','.join(guild['features'])
     return render_template('dashboard.html', guilds=guilds_result)
 
