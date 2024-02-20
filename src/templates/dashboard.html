@@ -19,12 +19,15 @@
         <li class="list-group-item row">
           {% if guild.icon %}
           <div class="col">
-            <img src="https://cdn.discordapp.com/icons/{{ guild.id }}/{{ guild.icon }}.webp?size=96" alt="{{ guild.name }}"
-              class="float-start">
+            <img src="https://cdn.discordapp.com/icons/{{ guild.id }}/{{ guild.icon }}.webp?size=96"
+              alt="{{ guild.name }}" class="float-start">
           </div>
           {% endif %}
           <div class="col">
-            <h2 {% if guild.owner %}class="text-primary"{% endif %}>{{ guild.name }}</h2>
+            <a href="https://discord.com/channels/{{ guild.id }}/" {% if guild.owner %}class="link-primary" {% else
+              %}class="link-secondary" {% endif %}>
+              <h2>{{ guild.name }}</h2>
+            </a>
             <p>Created at: {{ guild.created_at }}</p>
           </div>
           <div class="col">
